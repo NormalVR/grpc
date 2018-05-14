@@ -484,6 +484,16 @@
   HAS_SYSTEM_CARES = false
   endif
 
+  # ADDED BY MAX
+  ifeq ($(GRPC_CROSS_COMPILE),true)
+  # override system libraries if the config requires a custom compiled library
+  HAS_SYSTEM_OPENSSL_ALPN = false
+  HAS_SYSTEM_OPENSSL_NPN = false
+  HAS_SYSTEM_ZLIB = true
+  HAS_SYSTEM_PROTOBUF = false
+  HAS_SYSTEM_CARES = false
+  endif
+
   HAS_PROTOC ?= $(shell $(PROTOC_CHECK_CMD) 2> /dev/null && echo true || echo false)
   ifeq ($(HAS_PROTOC),true)
   CACHE_MK += HAS_PROTOC = true,
