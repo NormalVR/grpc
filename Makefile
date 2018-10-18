@@ -352,7 +352,7 @@ CXXFLAGS += -std=c++11
 ifeq ($(SYSTEM),Darwin)
 CXXFLAGS += -stdlib=libc++
 endif
-CPPFLAGS += -g -Wall -Wextra -Werror -Wno-long-long -Wno-unused-parameter -DOSATOMIC_USE_INLINED=1 -Wno-deprecated-declarations -Ithird_party/nanopb -DPB_FIELD_32BIT
+CPPFLAGS += -g -Wall -Wextra -Wno-long-long -Wno-unused-parameter -DOSATOMIC_USE_INLINED=1 -Wno-deprecated-declarations -Ithird_party/nanopb -DPB_FIELD_32BIT
 COREFLAGS += -fno-rtti -fno-exceptions
 LDFLAGS += -g
 
@@ -396,6 +396,9 @@ endif
 ifeq ($(SYSTEM),Linux)
 LIBS = dl rt m pthread
 LDFLAGS += -pthread
+	ifeq ($(ANDROID_SKIP_RT_PTHREAD), true)
+		LIBS = dl m
+	endif
 endif
 
 ifeq ($(SYSTEM),MINGW32)
@@ -844,6 +847,12 @@ endif
 else
 NO_PROTOBUF = true
 endif
+endif
+
+# ADDED BY MAX
+ifeq ($(GRPC_CROSS_COMPILE),true)
+PROTOC_PLUGINS = 
+PROTOC_PLUGINS_DIR=/usr/local/bin
 endif
 
 LIBS_PROTOBUF = protobuf
